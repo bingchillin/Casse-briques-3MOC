@@ -1,0 +1,194 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// A position on the map
+typedef struct
+{
+    int x;
+    int y;
+} Position;
+
+typedef struct
+{
+    Position *position;
+} Player;
+
+typedef struct
+{
+    int height;
+    int width;
+} Board;
+
+typedef struct
+{
+    Player **players;
+    int playerCount;
+    Board *board;
+} Game;
+
+Player *create_player()
+{
+    Player *player;
+    player = malloc(sizeof(Player));
+
+    return player;
+}
+
+void *create_map(int width, int height, Player **players, int playerCount)
+{
+    // Create a map
+    char map[height][width];
+
+    // Players starting positions
+    Position topLeftPosition = {
+        .x = 1,
+        .y = 1,
+    };
+    Position topRightPosition = {
+        .x = 1,
+        .y = width - 2,
+    };
+    Position bottomLeftPosition = {
+        .x = height - 2,
+        .y = 1,
+    };
+    Position bottomRightPosition = {
+        .x = height - 2,
+        .y = width - 2,
+    };
+
+    // Draw borders
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            if (i == 0 || i == height - 1 || j == 0 || j == width - 1)
+            {
+                map[i][j] = 'x';
+            }
+            else
+            {
+                map[i][j] = ' ';
+            }
+        }
+    }
+
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            // Put player on the map
+            for (int k = 0; k < playerCount; k++)
+            {
+                Position *playerPosition = players[k]->position;
+
+                if (playerPosition->x == i && playerPosition->y == j)
+                {
+                    map[i][j] = 'p';
+                    j++;
+                }
+            }
+            // Put space around player
+            for (int k = 0; k < playerCount; k++)
+            {
+                Position *playerPosition = players[k]->position;
+
+                if (playerPosition->x == topLeftPosition.x && playerPosition->y == topLeftPosition.y)
+                {
+                    if (map[i][j] == ' ' && i == playerPosition->x && j - 1 > playerPosition->y)
+                    {
+                        map[i][j] = 'm';
+                    }
+                    else
+                    {
+                        map[i][j] == ' ';
+                    }
+                }
+                else if (playerPosition->x == bottomRightPosition.x && playerPosition->y == bottomRightPosition.y)
+                {
+                    if (map[i][j] == ' ' && i == playerPosition->x && j + 1 < playerPosition->y)
+                    {
+                        map[i][j] = 'm';
+                    }
+                    else
+                    {
+                        map[i][j] == ' ';
+                    }
+                }
+            }
+        }
+    }
+
+    // Put walls
+    for (int i = 2; i < height - 2; i++)
+    {
+        for (int j = 1; j < width - 1; j++)
+        {
+            if (i % 2 == 0)
+            {
+                if (j % 2 == 0)
+                {
+                    map[i][j] = 'x';
+                }
+                else
+                {
+                    if (i == 2 && j == 1 || i == height - 3 && j == width - 2)
+                    {
+                        continue;
+                    }
+                    map[i][j] = 'm';
+                }
+            }
+            else
+            {
+                map[i][j] = 'm';
+            }
+        }
+    }
+
+    // Print map
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            char currentCell = map[i][j];
+            printf("%c", currentCell);
+        }
+        printf("\n");
+    }
+};
+
+Game *init_game(int width, int height, int playerCount, int winCount)
+{
+    Player *players[playerCount];
+    Position topLeftPosition[2] = {1, 1};
+    Position topRightPosition[2] = {1, width - 2};
+    Position bottomLeftPosition[2] = {height - 2, 1};
+    Position bottomRightPosition[2] = {height - 2, width - 2};
+
+    for (int i = 0; i < playerCount; i++)
+    {
+        Player *player = create_player();
+
+        switch (i)
+        {
+        case 0:
+            player->position = topLeftPosition;
+            break;
+        case 1:
+            player->position = bottomRightPosition;
+
+            break;
+        default:
+            break;
+        }
+        players[i] = player;
+    }
+    create_map(width, height, players, playerCount);
+}
+
+int main()
+{
+    init_game(15, 13, 2, 0);
+    return 0;
+}
