@@ -88,34 +88,18 @@ void *create_map(int width, int height, Player **players, int playerCount)
                     j++;
                 }
             }
-            // Put space around player
-            for (int k = 0; k < playerCount; k++)
-            {
-                Position *playerPosition = players[k]->position;
+        }
+    }
 
-                if (playerPosition->x == topLeftPosition.x && playerPosition->y == topLeftPosition.y)
-                {
-                    if (map[i][j] == ' ' && i == playerPosition->x && j - 1 > playerPosition->y)
-                    {
-                        map[i][j] = 'm';
-                    }
-                    else
-                    {
-                        map[i][j] == ' ';
-                    }
-                }
-                else if (playerPosition->x == bottomRightPosition.x && playerPosition->y == bottomRightPosition.y)
-                {
-                    if (map[i][j] == ' ' && i == playerPosition->x && j + 1 < playerPosition->y)
-                    {
-                        map[i][j] = 'm';
-                    }
-                    else
-                    {
-                        map[i][j] == ' ';
-                    }
-                }
-            }
+    for (int i = 0; i < width; i++)
+    {
+        if (map[1][i] == ' ')
+        {
+            map[1][i] = 'm';
+        }
+        if (map[height - 2][i] == ' ')
+        {
+            map[height - 2][i] = 'm';
         }
     }
 
@@ -132,10 +116,6 @@ void *create_map(int width, int height, Player **players, int playerCount)
                 }
                 else
                 {
-                    if (i == 2 && j == 1 || i == height - 3 && j == width - 2)
-                    {
-                        continue;
-                    }
                     map[i][j] = 'm';
                 }
             }
@@ -144,6 +124,27 @@ void *create_map(int width, int height, Player **players, int playerCount)
                 map[i][j] = 'm';
             }
         }
+    }
+
+    if (playerCount >= 1)
+    {
+        map[1][2] = ' ';
+        map[2][1] = ' ';
+    }
+    if (playerCount >= 2)
+    {
+        map[height - 2][width - 3] = ' ';
+        map[height - 3][width - 2] = ' ';
+    }
+    if (playerCount >= 3)
+    {
+        map[1][width - 3] = ' ';
+        map[2][width - 2] = ' ';
+    }
+    if (playerCount >= 4)
+    {
+        map[height - 2][2] = ' ';
+        map[height - 3][1] = ' ';
     }
 
     // Print map
@@ -177,7 +178,12 @@ Game *init_game(int width, int height, int playerCount, int winCount)
             break;
         case 1:
             player->position = bottomRightPosition;
-
+            break;
+        case 2:
+            player->position = topRightPosition;
+            break;
+        case 3:
+            player->position = bottomLeftPosition;
             break;
         default:
             break;
@@ -189,6 +195,6 @@ Game *init_game(int width, int height, int playerCount, int winCount)
 
 int main()
 {
-    init_game(15, 13, 2, 0);
+    init_game(9, 5, 2, 0);
     return 0;
 }
