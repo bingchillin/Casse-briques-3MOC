@@ -48,27 +48,15 @@ void *create_map(int width, int height, Player **players, int playerCount)
         }
     }
 
-    // Put players on the map
-    for (int i = 0; i < height; i++)
+    // Put player on the map
+    for (int i = 0; i < playerCount; i++)
     {
-        for (int j = 0; j < width; j++)
-        {
-            // Put player on the map
-            for (int k = 0; k < playerCount; k++)
-            {
-                Position *playerPosition = players[k]->position;
-
-                if (playerPosition->x == i && playerPosition->y == j)
-                {
-                    map[i][j] = 'p';
-                    j++;
-                }
-            }
-        }
+        Position *playerPosition = players[i]->position;
+        map[playerPosition->x][playerPosition->y] = 'p';
     }
 
     // Put first and last row of walls
-    for (int i = 0; i < width; i++)
+    for (int i = 1; i < width - 1; i++)
     {
         if (map[1][i] == ' ')
         {
@@ -85,11 +73,9 @@ void *create_map(int width, int height, Player **players, int playerCount)
     {
         for (int j = 1; j < width - 1; j++)
         {
-            // Alternate unbreakable walls and mixed-walls between each row
-            if (i % 2 == 0)
+            if (i % 2 == 0) // Alternate unbreakable walls and mixed-walls between each row
             {
-                // Alternate unbreakable and breakable walls between each column
-                if (j % 2 == 0)
+                if (j % 2 == 0) // Alternate unbreakable and breakable walls between each column
                 {
                     map[i][j] = 'x';
                 }
@@ -177,6 +163,6 @@ Game *init_game(int width, int height, int playerCount, int winCount)
 
 int main()
 {
-    init_game(9, 5, 1, 0);
+    init_game(9, 5, 2, 0);
     return 0;
 }
