@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// A position on the map
+// A position on the map, with "x" horizontal axis, and "y" vertical axis
 typedef struct
 {
     int x;
@@ -15,15 +15,8 @@ typedef struct
 
 typedef struct
 {
-    int height;
-    int width;
-} Board;
-
-typedef struct
-{
     Player **players;
     int playerCount;
-    Board *board;
 } Game;
 
 Player *create_player()
@@ -38,24 +31,6 @@ void *create_map(int width, int height, Player **players, int playerCount)
 {
     // Create a map
     char map[height][width];
-
-    // Players starting positions
-    Position topLeftPosition = {
-        .x = 1,
-        .y = 1,
-    };
-    Position topRightPosition = {
-        .x = 1,
-        .y = width - 2,
-    };
-    Position bottomLeftPosition = {
-        .x = height - 2,
-        .y = 1,
-    };
-    Position bottomRightPosition = {
-        .x = height - 2,
-        .y = width - 2,
-    };
 
     // Draw borders
     for (int i = 0; i < height; i++)
@@ -73,6 +48,7 @@ void *create_map(int width, int height, Player **players, int playerCount)
         }
     }
 
+    // Put players on the map
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
@@ -91,6 +67,7 @@ void *create_map(int width, int height, Player **players, int playerCount)
         }
     }
 
+    // Put first and last row of walls
     for (int i = 0; i < width; i++)
     {
         if (map[1][i] == ' ')
@@ -103,13 +80,15 @@ void *create_map(int width, int height, Player **players, int playerCount)
         }
     }
 
-    // Put walls
+    // Put the other walls between them
     for (int i = 2; i < height - 2; i++)
     {
         for (int j = 1; j < width - 1; j++)
         {
+            // Alternate unbreakable walls and mixed-walls between each row
             if (i % 2 == 0)
             {
+                // Alternate unbreakable and breakable walls between each column
                 if (j % 2 == 0)
                 {
                     map[i][j] = 'x';
@@ -126,6 +105,7 @@ void *create_map(int width, int height, Player **players, int playerCount)
         }
     }
 
+    // Put some space around players
     if (playerCount >= 1)
     {
         map[1][2] = ' ';
@@ -195,6 +175,6 @@ Game *init_game(int width, int height, int playerCount, int winCount)
 
 int main()
 {
-    init_game(9, 5, 2, 0);
+    init_game(9, 5, 1, 0);
     return 0;
 }
