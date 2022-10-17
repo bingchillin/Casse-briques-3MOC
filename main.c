@@ -142,6 +142,8 @@ void *create_map(int width, int height, Player **players, int playerCount)
 Game *init_game(int width, int height, int playerCount, int winCount)
 {
     Player *players[playerCount];
+
+    // Players starting positions
     Position topLeftPosition[2] = {1, 1};
     Position topRightPosition[2] = {1, width - 2};
     Position bottomLeftPosition[2] = {height - 2, 1};
