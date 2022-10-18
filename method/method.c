@@ -144,3 +144,34 @@ Game *init_game(int width, int height, int playerCount, int winCount)
     create_map(width, height, players, playerCount);
 }
 
+
+void loadMenu() {
+    int menuChoice = 0;
+
+    printf("########## Casse briques ##########\n\n");
+
+    printf(" - 1 : Lancer le jeu\n");
+    printf(" - 2 : Parametres\n");
+    printf(" - 3 : Quitter\n\n");
+
+    while(1) {
+        scanf("%d", &menuChoice);
+
+        switch (menuChoice) {
+            case 1:
+                printf("Jeu : OK\n");
+                init_game(9, 5, 2, 0);
+                break;
+            case 2:
+                printf("Parametres : OK\n");
+                break;
+            case 3:
+                printf("Merci d'avoir joue !\n");
+                exit(1);
+                break;
+            default:
+                printf("Mauvais choix ! Veuiller reessayer :\n");
+                break;
+        }
+    }
+}

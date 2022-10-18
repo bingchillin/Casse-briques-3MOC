@@ -27,3 +27,5 @@ Player *create_player();
 void *create_map(int width, int height, Player **players, int playerCount);
 
 Game *init_game(int width, int height, int playerCount, int winCount);
+
+void loadMenu();

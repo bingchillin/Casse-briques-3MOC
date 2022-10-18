@@ -5,5 +5,5 @@ set(CMAKE_C_STANDARD 11)
 
 include_directories(.)
 
-add_executable(Casse_briques_3MOC
-        main.c)
+add_executable(Casse_briques_3MOC main.c
+        header/header.h method/method.c)
