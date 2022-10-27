@@ -9,11 +9,13 @@ Player *create_player()
     return player;
 }
 
-
 void *create_map(int width, int height, Player **players, int playerCount)
 {
-    // Create a map
-    char map[height][width];
+    // Allocate global variable "map"
+    map = (int**)malloc(height * sizeof(int*));
+    for (int i = 0; i < height; i++){
+        map[i] = (int*)malloc(width * sizeof(int));
+    }
 
     // Draw borders
     for (int i = 0; i < height; i++)

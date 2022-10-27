@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
+int **map;
 
 // A position on the map, with "x" horizontal axis, and "y" vertical axis
 typedef struct
@@ -20,7 +20,6 @@ typedef struct
     Player **players;
     int playerCount;
 } Game;
-
 
 Player *create_player();
 
