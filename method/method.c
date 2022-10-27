@@ -169,7 +169,7 @@ void loadMenu() {
                 break;
             case 3:
                 printf("Merci d'avoir joue !\n");
-                exit(1);
+                exit(0);
                 break;
             default:
                 printf("Mauvais choix ! Veuiller reessayer :\n");
