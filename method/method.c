@@ -153,7 +153,7 @@ void loadMenu() {
     printf("########## Casse briques ##########\n\n");
 
     printf(" - 1 : Lancer le jeu\n");
-    printf(" - 2 : Parametres\n");
+    printf(" - 2 : Paramètres\n");
     printf(" - 3 : Quitter\n\n");
 
     while(1) {
@@ -165,14 +165,14 @@ void loadMenu() {
                 init_game(9, 5, 2, 0);
                 break;
             case 2:
-                printf("Parametres : OK\n");
+                printf("Paramètres : OK\n");
                 break;
             case 3:
-                printf("Merci d'avoir joue !\n");
+                printf("Merci d'avoir joué !\n");
                 exit(0);
                 break;
             default:
-                printf("Mauvais choix ! Veuiller reessayer :\n");
+                printf("Mauvais choix ! Veuillez reéssayer :\n");
                 break;
         }
     }
