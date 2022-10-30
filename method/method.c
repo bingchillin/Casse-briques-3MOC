@@ -20,9 +20,9 @@ void *create_map(int width, int height, Game *game)
             }
         }
     }
-    set_players_positions(game);
 
     // Put player on the map
+    set_players_positions(game);
     for (int i = 0; i < playerCount; i++)
     {
         Position *playerPosition = players[i]->position;
@@ -47,21 +47,21 @@ void *create_map(int width, int height, Game *game)
     {
         for (int j = 1; j < width - 1; j++)
         {
-                if (i % 2 == 0) // Alternate unbreakable walls and mixed-walls between each row
+            if (i % 2 == 0) // Alternate unbreakable walls and mixed-walls between each row
+            {
+                if (j % 2 == 0) // Alternate unbreakable and breakable walls between each column
                 {
-                    if (j % 2 == 0) // Alternate unbreakable and breakable walls between each column
-                    {
-                        gameMap2D[i][j] = 'x';
-                    }
-                    else
-                    {
-                        gameMap2D[i][j] = 'm';
-                    }
+                    gameMap2D[i][j] = 'x';
                 }
                 else
                 {
                     gameMap2D[i][j] = 'm';
                 }
+            }
+            else
+            {
+                gameMap2D[i][j] = 'm';
+            }
         }
     }
 
@@ -167,19 +167,19 @@ Game *init_game(int width, int height, int playerCount, int winCount)
 void loadMenu() {
     int menuChoice = 0;
 
-    printf("########## Casse briques ##########\n\n");
-
-    printf(" - 1 : Lancer le jeu\n");
-    printf(" - 2 : Paramètres\n");
-    printf(" - 3 : Quitter\n\n");
+    printf(MAGENTA "########## Casse briques ##########\n\n" RESET);
 
     while(1) {
+        printf(GREEN " - 1 : Lancer le jeu\n" RESET);
+        printf(BLUE " - 2 : Paramètres\n" RESET);
+        printf(RED " - 3 : Quitter\n\n" RESET);
         scanf("%d", &menuChoice);
 
         switch (menuChoice) {
             case 1:
                 printf("Jeu : OK\n");
                 init_game(9, 5, 2, 0);
+                printf("\n");
                 break;
             case 2:
                 printf("Paramètres : OK\n");
@@ -187,9 +187,8 @@ void loadMenu() {
             case 3:
                 printf("Merci d'avoir joué !\n");
                 exit(0);
-                break;
             default:
-                printf("Mauvais choix ! Veuillez reéssayer :\n");
+                printf("Mauvais choix ! Veuillez réessayer :\n");
                 break;
         }
     }
