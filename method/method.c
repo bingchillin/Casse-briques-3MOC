@@ -1,22 +1,10 @@
 #include "../header/header.h"
 
-
-Player *create_player()
+void *create_map(int width, int height, Game *game)
 {
-    Player *player;
-    player = malloc(sizeof(Player));
-
-    return player;
-}
-
-void *create_map(int width, int height, Player **players, int playerCount)
-{
-    // Allocate global variable "map"
-    map = (int**)malloc(height * sizeof(int*));
-    for (int i = 0; i < height; i++){
-        map[i] = (int*)malloc(width * sizeof(int));
-    }
-
+    char **gameMap2D = game->map->gameMap2D;
+    int playerCount = game->playerCount;
+    Player **players = game->players;
     // Draw borders
     for (int i = 0; i < height; i++)
     {
@@ -24,32 +12,33 @@ void *create_map(int width, int height, Player **players, int playerCount)
         {
             if (i == 0 || i == height - 1 || j == 0 || j == width - 1)
             {
-                map[i][j] = 'x';
+                gameMap2D[i][j] = 'x';
             }
             else
             {
-                map[i][j] = ' ';
+                gameMap2D[i][j] = ' ';
             }
         }
     }
+    set_players_positions(game);
 
     // Put player on the map
     for (int i = 0; i < playerCount; i++)
     {
         Position *playerPosition = players[i]->position;
-        map[playerPosition->x][playerPosition->y] = 'p';
+        gameMap2D[playerPosition->x][playerPosition->y] = 'p';
     }
 
     // Put first and last row of walls
     for (int i = 1; i < width - 1; i++)
     {
-        if (map[1][i] == ' ')
+        if (gameMap2D[1][i] == ' ')
         {
-            map[1][i] = 'm';
+            gameMap2D[1][i] = 'm';
         }
-        if (map[height - 2][i] == ' ')
+        if (gameMap2D[height - 2][i] == ' ')
         {
-            map[height - 2][i] = 'm';
+            gameMap2D[height - 2][i] = 'm';
         }
     }
 
@@ -58,61 +47,65 @@ void *create_map(int width, int height, Player **players, int playerCount)
     {
         for (int j = 1; j < width - 1; j++)
         {
-            if (i % 2 == 0) // Alternate unbreakable walls and mixed-walls between each row
-            {
-                if (j % 2 == 0) // Alternate unbreakable and breakable walls between each column
+                if (i % 2 == 0) // Alternate unbreakable walls and mixed-walls between each row
                 {
-                    map[i][j] = 'x';
+                    if (j % 2 == 0) // Alternate unbreakable and breakable walls between each column
+                    {
+                        gameMap2D[i][j] = 'x';
+                    }
+                    else
+                    {
+                        gameMap2D[i][j] = 'm';
+                    }
                 }
                 else
                 {
-                    map[i][j] = 'm';
+                    gameMap2D[i][j] = 'm';
                 }
-            }
-            else
-            {
-                map[i][j] = 'm';
-            }
         }
     }
+
 
     // Put some space around players
     if (playerCount >= 1)
     {
-        map[1][2] = ' ';
-        map[2][1] = ' ';
+        gameMap2D[1][2] = ' ';
+        gameMap2D[2][1] = ' ';
     }
     if (playerCount >= 2)
     {
-        map[height - 2][width - 3] = ' ';
-        map[height - 3][width - 2] = ' ';
+        gameMap2D[height - 2][width - 3] = ' ';
+        gameMap2D[height - 3][width - 2] = ' ';
     }
     if (playerCount >= 3)
     {
-        map[1][width - 3] = ' ';
-        map[2][width - 2] = ' ';
+        gameMap2D[1][width - 3] = ' ';
+        gameMap2D[2][width - 2] = ' ';
     }
     if (playerCount >= 4)
     {
-        map[height - 2][2] = ' ';
-        map[height - 3][1] = ' ';
+        gameMap2D[height - 2][2] = ' ';
+        gameMap2D[height - 3][1] = ' ';
     }
+
 
     // Print map
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
         {
-            char currentCell = map[i][j];
+            char currentCell = gameMap2D[i][j];
             printf("%c", currentCell);
         }
         printf("\n");
     }
 }
 
-Game *init_game(int width, int height, int playerCount, int winCount)
-{
-    Player *players[playerCount];
+void set_players_positions(Game *game) {
+    Player **players = game->players;
+    int playerCount = game->playerCount;
+    int height = game->map->height;
+    int width = game->map->width;
 
     // Players starting positions
     Position topLeftPosition[2] = {1, 1};
@@ -122,7 +115,7 @@ Game *init_game(int width, int height, int playerCount, int winCount)
 
     for (int i = 0; i < playerCount; i++)
     {
-        Player *player = create_player();
+        Player *player = players[i];
 
         switch (i)
         {
@@ -141,9 +134,33 @@ Game *init_game(int width, int height, int playerCount, int winCount)
             default:
                 break;
         }
-        players[i] = player;
     }
-    create_map(width, height, players, playerCount);
+}
+
+Game *init_game(int width, int height, int playerCount, int winCount)
+{
+    Game *game = malloc(sizeof(Game));
+
+    game->playerCount = playerCount;
+
+    Player **players = malloc(sizeof(Player*) * playerCount);
+    for (int i = 0; i < playerCount; i++) {
+        players[i] = malloc(sizeof(Player));
+    }
+    game->players = players;
+
+    Map *map = malloc(sizeof (Map));
+    game->map = map;
+    map->height = height;
+    map->width = width;
+
+    char **gameMap = (char**)malloc(height * sizeof(char*));
+    for (int i = 0; i < height; i++){
+        gameMap[i] = (char*)malloc(width * sizeof(char));
+    }
+    map->gameMap2D = gameMap;
+
+    create_map(width, height, game);
 }
 
 
