@@ -35,8 +35,6 @@ typedef struct
     Map *map;
 } Game;
 
-void *create_map(int width, int height, Game *game);
-
 Game *init_game(int width, int height, int playerCount, int winCount);
 
 void set_players_positions(Game *game);
