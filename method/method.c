@@ -23,7 +23,7 @@ Game *init_game(int width, int height, int playerCount, int winCount)
     }
     map->gameMap2D = gameMap;
 
-    create_map1(width, height, game);
+    create_map2(width, height, game);
 }
 
 

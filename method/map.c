@@ -111,7 +111,7 @@ void *create_map2(int width, int height, Game *game)
     {
         for (int j = 0; j < width; j++)
         {
-            if (i == 0 || i == height - 1 || j == 0 || j == width - 1)
+            if (i == 0 || i == height - 1 || j == 0 && i != height/2|| j == width - 1 && i != height/2)
             {
                 gameMap2D[i][j] = 'x';
             }
