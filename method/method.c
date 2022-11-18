@@ -1,16 +1,31 @@
 #include "../header/header.h"
 
-void *create_map(int width, int height, Game *game)
+
+void print_map(Game *game){
+    int height = game->map->height;
+    int width = game->map->width;
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            char currentCell = game->map->gameMap2D[i][j];
+            printf("%c", currentCell);
+        }
+        printf("\n");
+    }
+}
+
+Game *create_map(Game *game)
 {
     char **gameMap2D = game->map->gameMap2D;
     int playerCount = game->playerCount;
     Player **players = game->players;
     // Draw borders
-    for (int i = 0; i < height; i++)
+    for (int i = 0; i < game->map->height; i++)
     {
-        for (int j = 0; j < width; j++)
+        for (int j = 0; j < game->map->width; j++)
         {
-            if (i == 0 || i == height - 1 || j == 0 || j == width - 1)
+            if (i == 0 || i == game->map->height - 1 || j == 0 || j == game->map->width - 1)
             {
                 gameMap2D[i][j] = 'x';
             }
@@ -30,22 +45,22 @@ void *create_map(int width, int height, Game *game)
     }
 
     // Put first and last row of walls
-    for (int i = 1; i < width - 1; i++)
+    for (int i = 1; i < game->map->width - 1; i++)
     {
         if (gameMap2D[1][i] == ' ')
         {
             gameMap2D[1][i] = 'm';
         }
-        if (gameMap2D[height - 2][i] == ' ')
+        if (gameMap2D[game->map->height - 2][i] == ' ')
         {
-            gameMap2D[height - 2][i] = 'm';
+            gameMap2D[game->map->height - 2][i] = 'm';
         }
     }
 
     // Put the other walls between them
-    for (int i = 2; i < height - 2; i++)
+    for (int i = 2; i < game->map->height - 2; i++)
     {
-        for (int j = 1; j < width - 1; j++)
+        for (int j = 1; j < game->map->width - 1; j++)
         {
             if (i % 2 == 0) // Alternate unbreakable walls and mixed-walls between each row
             {
@@ -74,31 +89,20 @@ void *create_map(int width, int height, Game *game)
     }
     if (playerCount >= 2)
     {
-        gameMap2D[height - 2][width - 3] = ' ';
-        gameMap2D[height - 3][width - 2] = ' ';
+        gameMap2D[game->map->height - 2][game->map->width - 3] = ' ';
+        gameMap2D[game->map->height - 3][game->map->width - 2] = ' ';
     }
     if (playerCount >= 3)
     {
-        gameMap2D[1][width - 3] = ' ';
-        gameMap2D[2][width - 2] = ' ';
+        gameMap2D[1][game->map->width - 3] = ' ';
+        gameMap2D[2][game->map->width - 2] = ' ';
     }
     if (playerCount >= 4)
     {
-        gameMap2D[height - 2][2] = ' ';
-        gameMap2D[height - 3][1] = ' ';
+        gameMap2D[game->map->height - 2][2] = ' ';
+        gameMap2D[game->map->height - 3][1] = ' ';
     }
-
-
-    // Print map
-    for (int i = 0; i < height; i++)
-    {
-        for (int j = 0; j < width; j++)
-        {
-            char currentCell = gameMap2D[i][j];
-            printf("%c", currentCell);
-        }
-        printf("\n");
-    }
+    return game;
 }
 
 void set_players_positions(Game *game) {
@@ -160,7 +164,9 @@ Game *init_game(int width, int height, int playerCount, int winCount)
     }
     map->gameMap2D = gameMap;
 
-    create_map(width, height, game);
+    game = create_map(game);
+    print_map(game);
+    return game;
 }
 
 
@@ -169,10 +175,10 @@ void loadMenu() {
 
     printf(MAGENTA "########## Casse briques ##########\n\n" RESET);
 
+    printf(GREEN " - 1 : Lancer le jeu\n" RESET);
+    printf(BLUE " - 2 : Paramètres\n" RESET);
+    printf(RED " - 3 : Quitter\n\n" RESET);
     while(1) {
-        printf(GREEN " - 1 : Lancer le jeu\n" RESET);
-        printf(BLUE " - 2 : Paramètres\n" RESET);
-        printf(RED " - 3 : Quitter\n\n" RESET);
         scanf("%d", &menuChoice);
 
         switch (menuChoice) {
