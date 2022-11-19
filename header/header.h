@@ -36,7 +36,10 @@ typedef struct
     Map *map;
 } Game;
 
-Game *create_map(Game *game);
+Game *create_map1(Game *game);
+Game *create_map2(Game *game);
+Game *create_map3(Game *game);
+
 
 Game *init_game(int width, int height, int bomb, int playerCount, int winCount);
 
