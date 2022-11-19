@@ -1,5 +1,20 @@
 #include "../header/header.h"
 
+Game *createPlayers(Game *game){
+    Player **players = malloc(sizeof(Player*) * game->playerCount);
+    for (int i = 0; i < game->playerCount; i++) {
+        players[i] = malloc(sizeof(Player));
+        players[i]->explodingRange = 2;
+        players[i]->maxBombs = 3;
+        players[i]->maxMoves = 1;
+        players[i]->countBombs = 1;
+        players[i]->countMoves = 1;
+        players[i]->turn=0;
+    }
+    game->players = players;
+    return game;
+}
+
 Game movePlayer(Game *game){
 }
 
@@ -365,11 +380,7 @@ Game *init_game(int width, int height, int bomb, int playerCount, int winCount)
 
     game->playerCount = playerCount;
 
-    Player **players = malloc(sizeof(Player*) * playerCount);
-    for (int i = 0; i < playerCount; i++) {
-        players[i] = malloc(sizeof(Player));
-    }
-    game->players = players;
+    game = createPlayers(game);
 
     Map *map = malloc(sizeof (Map));
     game->map = map;
@@ -388,7 +399,7 @@ Game *init_game(int width, int height, int bomb, int playerCount, int winCount)
 }
 
 Game letsPlay(){
-    Game *game = init_game(9,5,1,2,0);
+    Game *game = init_game(9,7,1,2,0);
     print_map(game);
     movePlayer(game);
 }

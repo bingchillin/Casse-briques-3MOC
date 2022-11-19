@@ -27,11 +27,18 @@ typedef struct
 typedef struct
 {
     Position *position;
+    int maxMoves;
+    int countMoves;
+    int maxBombs;
+    int countBombs;
+    int explodingRange;
+    int turn;
 } Player;
 
 typedef struct
 {
     Player **players;
+    int actualTurn;
     int playerCount;
     Map *map;
 } Game;
@@ -44,5 +51,11 @@ Game *create_map3(Game *game);
 Game *init_game(int width, int height, int bomb, int playerCount, int winCount);
 
 void set_players_positions(Game *game);
+
+Game *createPlayers(Game *game);
+
+Game movePlayer(Game *game);
+
+void print_map(Game *game);
 
 void loadMenu();
