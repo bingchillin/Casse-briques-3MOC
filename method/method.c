@@ -1,9 +1,13 @@
 #include "../header/header.h"
 
+Game movePlayer(Game *game){
+}
 
 void print_map(Game *game){
     int height = game->map->height;
     int width = game->map->width;
+    printf("\n %d \n",game->map->defaultNbBomb);
+    printf("%d %d \n",game->map->width, game->map->height);
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
@@ -141,7 +145,7 @@ void set_players_positions(Game *game) {
     }
 }
 
-Game *init_game(int width, int height, int playerCount, int winCount)
+Game *init_game(int width, int height, int bomb, int playerCount, int winCount)
 {
     Game *game = malloc(sizeof(Game));
 
@@ -157,6 +161,7 @@ Game *init_game(int width, int height, int playerCount, int winCount)
     game->map = map;
     map->height = height;
     map->width = width;
+    map->defaultNbBomb=bomb;
 
     char **gameMap = (char**)malloc(height * sizeof(char*));
     for (int i = 0; i < height; i++){
@@ -165,10 +170,14 @@ Game *init_game(int width, int height, int playerCount, int winCount)
     map->gameMap2D = gameMap;
 
     game = create_map(game);
-    print_map(game);
     return game;
 }
 
+Game letsPlay(){
+    Game *game = init_game(9,5,1,2,0);
+    print_map(game);
+    movePlayer(game);
+}
 
 void loadMenu() {
     int menuChoice = 0;
@@ -184,7 +193,7 @@ void loadMenu() {
         switch (menuChoice) {
             case 1:
                 printf("Jeu : OK\n");
-                init_game(9, 5, 2, 0);
+                letsPlay();
                 printf("\n");
                 break;
             case 2:

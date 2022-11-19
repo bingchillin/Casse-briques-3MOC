@@ -11,6 +11,7 @@
 #define WHITE "\x1B[37m"
 
 typedef struct {
+    int defaultNbBomb;
     int width;
     int height;
     char **gameMap2D;
@@ -37,7 +38,7 @@ typedef struct
 
 Game *create_map(Game *game);
 
-Game *init_game(int width, int height, int playerCount, int winCount);
+Game *init_game(int width, int height, int bomb, int playerCount, int winCount);
 
 void set_players_positions(Game *game);
 
