@@ -50,10 +50,10 @@ int checkPosChangingConditions(Game *game, int playerChoice){
     }
 }
 
-Game *setChangedPosOnMap(Game *game){
+Game *setChangedPosOnMap(Game *game, int playerNum){
     for (int i = 0; i < game->playerCount; i++)
     {
-        Position *playerPosition = game->players[i]->position;
+        Position *playerPosition = game->players[playerNum]->position;
         game->map->gameMap2D[playerPosition->x][playerPosition->y] = 'p';
     }
     print_map(game);
@@ -144,7 +144,6 @@ void print_map(Game *game){
 Game *movePlayer(Game *game){
     int playerMove;
     int validMove = 0;
-    Player *actualPlayer = malloc(sizeof(Player));
     printf(MAGENTA "##### Deplacement #####\n\n");
     for (int i = 0; i < game->playerCount; ++i) {
         if(game->players[i]->turn==1){
@@ -171,7 +170,7 @@ Game *movePlayer(Game *game){
                         validMove = checkPosChangingConditions(game,playerMove);
                         if (validMove == 1) {
                             game->players[i]->position->y = game->players[i]->position->y - 1;
-                            game = setChangedPosOnMap(game);
+                            game = setChangedPosOnMap(game, i);
                             return 0;
                         }
                         else{
@@ -189,7 +188,7 @@ Game *movePlayer(Game *game){
                         validMove = checkPosChangingConditions(game,playerMove);
                         if (validMove == 1) {
                             game->players[i]->position->x = game->players[i]->position->x - 1;
-                            game = setChangedPosOnMap(game);
+                            game = setChangedPosOnMap(game, i);
                             break;
                         } else{
                             printf("Vous ne pouvez pas vous déplacer vers la gauche");
@@ -203,7 +202,7 @@ Game *movePlayer(Game *game){
                 for (int i = 0; i < game->playerCount; ++i) {
                     if(game->players[i]->turn==1){
                         game->players[i]->position->x = game->players[i]->position->x+1;
-                        setChangedPosOnMap(game);
+                        setChangedPosOnMap(game, i);
                         print_map(game);
                         return 0;
                     }
@@ -214,7 +213,7 @@ Game *movePlayer(Game *game){
                 for (int i = 0; i < game->playerCount; ++i) {
                     if(game->players[i]->turn==1){
                         game->players[i]->position->x = game->players[i]->position->y+1;
-                        setChangedPosOnMap(game);
+                        setChangedPosOnMap(game, i);
                         print_map(game);
                         return 0;
                     }
@@ -253,7 +252,9 @@ Game *create_map1(Game *game)
 
     // Put player on the map
     set_players_positions(game);
-    setChangedPosOnMap(game);
+    for (int i = 0; i < playerCount ; i++) {
+        setChangedPosOnMap(game, i);
+    }
 
     // Put first and last row of walls
     for (int i = 1; i < game->map->width - 1; i++)
