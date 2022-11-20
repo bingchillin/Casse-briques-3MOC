@@ -54,7 +54,7 @@ void set_players_positions(Game *game);
 
 Game *createPlayers(Game *game);
 
-Game movePlayer(Game *game);
+Game *movePlayer(Game *game);
 
 void print_map(Game *game);
 

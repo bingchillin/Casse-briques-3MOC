@@ -1,5 +1,64 @@
 #include "../header/header.h"
+int checkPosChangingConditions(Game *game, int playerChoice){
+    int validOrNot = 0;
+    for (int i = 0; i < game->playerCount; ++i) {
+        if (game->players[i]->turn==1){
+            if (playerChoice==1){
+                printf("passe par ici");
+                if (game->players[i]->position->y <= 0){
+                    printf("ici");
+                    validOrNot = 0;
+                    return validOrNot;
+                }
+                else{
+                    printf("passe par là");
+                    validOrNot = 1;
+                    return validOrNot;
+                }
+            }
+            if (playerChoice == 2){
+                if (game->players[i]->position->x <= 0){
+                    validOrNot = 0;
+                    return validOrNot;
+                }
+                else{
+                    validOrNot = 1;
+                    return validOrNot;
+                }
+            }
+            if(playerChoice == 3){
+                if (game->players[i]->position->x >= game->map->width){
+                    validOrNot = 0;
+                    return validOrNot;
+                }
+                else{
+                    validOrNot = 1;
+                    return validOrNot;
+                }
+            }
+            if(playerChoice == 4){
+                if (game->players[i]->position->y >= game->map->height){
+                    validOrNot = 0;
+                    return validOrNot;
+                }
+                else{
+                    validOrNot = 1;
+                    return validOrNot;
+                }
+            }
+        }
+    }
+}
 
+Game *setChangedPosOnMap(Game *game){
+    for (int i = 0; i < game->playerCount; i++)
+    {
+        Position *playerPosition = game->players[i]->position;
+        game->map->gameMap2D[playerPosition->x][playerPosition->y] = 'p';
+    }
+    print_map(game);
+    return game;
+}
 Game *playersTurn(Game *game){
     int playerChoice = 0;
 
@@ -26,7 +85,7 @@ Game *playersTurn(Game *game){
                 break;
             case 3:
                 for (int i = 0; i < game->playerCount; ++i) {
-                    if (game->players[i]->turn=1){
+                    if (game->players[i]->turn==1){
                         if(i+1 == game->playerCount){
                             game->players[i]->turn=0;
                             game->players[0]->turn=1;
@@ -66,9 +125,6 @@ Game *createPlayers(Game *game){
     return game;
 }
 
-Game movePlayer(Game *game){
-}
-
 void print_map(Game *game){
     int height = game->map->height;
     int width = game->map->width;
@@ -83,6 +139,95 @@ void print_map(Game *game){
         }
         printf("\n");
     }
+}
+
+Game *movePlayer(Game *game){
+    int playerMove;
+    int validMove = 0;
+    Player *actualPlayer = malloc(sizeof(Player));
+    printf(MAGENTA "##### Deplacement #####\n\n");
+    for (int i = 0; i < game->playerCount; ++i) {
+        if(game->players[i]->turn==1){
+            printf(YELLOW "Deplacements restants : %d \n\n", game->players[i]->countMoves);
+            break;
+        }
+    }
+    printf(GREEN " 1 : Vers le haut \n" RESET);
+    printf(BLUE " 2 : Vers la gauche \n" RESET);
+    printf(RED " 3 : Vers la droite \n" RESET);
+    printf(WHITE " 4 : Vers le bas \n" RESET);
+    printf(CYAN " 5 : Annuler \n" RESET);
+
+    while(1) {
+        scanf("%d", &playerMove);
+
+        switch (playerMove) {
+            printf("zeroOOO");
+            case 1:
+                printf("ONE");
+                for (int i = 0; i < game->playerCount; ++i) {
+                    if(game->players[i]->turn==1){
+                        printf("TWO");
+                        validMove = checkPosChangingConditions(game,playerMove);
+                        if (validMove == 1) {
+                            game->players[i]->position->y = game->players[i]->position->y - 1;
+                            game = setChangedPosOnMap(game);
+                            return 0;
+                        }
+                        else{
+                            printf("Vous ne pouvez pas vous déplacer vers le haut");
+                            movePlayer(game);
+                            break;
+                        }
+                    }
+                }
+                printf("\n");
+                break;
+            case 2:
+                for (int i = 0; i < game->playerCount; ++i) {
+                    if(game->players[i]->turn==1){
+                        validMove = checkPosChangingConditions(game,playerMove);
+                        if (validMove == 1) {
+                            game->players[i]->position->x = game->players[i]->position->x - 1;
+                            game = setChangedPosOnMap(game);
+                            break;
+                        } else{
+                            printf("Vous ne pouvez pas vous déplacer vers la gauche");
+                            movePlayer(game);
+                            return 0;
+                        }
+                    }
+                }
+                break;
+            case 3:
+                for (int i = 0; i < game->playerCount; ++i) {
+                    if(game->players[i]->turn==1){
+                        game->players[i]->position->x = game->players[i]->position->x+1;
+                        setChangedPosOnMap(game);
+                        print_map(game);
+                        return 0;
+                    }
+                }
+                printf("\n");
+                break;
+            case 4:
+                for (int i = 0; i < game->playerCount; ++i) {
+                    if(game->players[i]->turn==1){
+                        game->players[i]->position->x = game->players[i]->position->y+1;
+                        setChangedPosOnMap(game);
+                        print_map(game);
+                        return 0;
+                    }
+                }
+                break;
+            case 5:
+                playersTurn(game);
+                break;
+            default:
+                printf("Mauvais choix ! Veuillez réessayer :\n");
+        }
+    }
+    return game;
 }
 
 Game *create_map1(Game *game)
@@ -108,11 +253,7 @@ Game *create_map1(Game *game)
 
     // Put player on the map
     set_players_positions(game);
-    for (int i = 0; i < playerCount; i++)
-    {
-        Position *playerPosition = players[i]->position;
-        gameMap2D[playerPosition->x][playerPosition->y] = 'p';
-    }
+    setChangedPosOnMap(game);
 
     // Put first and last row of walls
     for (int i = 1; i < game->map->width - 1; i++)
