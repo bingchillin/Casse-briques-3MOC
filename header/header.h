@@ -48,7 +48,7 @@ Game *create_map2(Game *game);
 Game *create_map3(Game *game);
 
 
-Game *init_game(int width, int height, int bomb, int playerCount, int winCount);
+Game *init_game(int width, int height, int bomb, int playerCount, int winCount, int selectedMap);
 
 void set_players_positions(Game *game);
 
@@ -59,3 +59,5 @@ Game *movePlayer(Game *game);
 void print_map(Game *game);
 
 void loadMenu();
+
+Game mapChoice();

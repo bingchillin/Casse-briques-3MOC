@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/zrzrz/CLionProjects/Casse-briques-3MOC/header/header.h
+stdio.h
+-
+stdlib.h
+-
+
+C:/Users/zrzrz/CLionProjects/Casse-briques-3MOC/main.c
+stdio.h
+-
+stdlib.h
+-
+method/method.c
+C:/Users/zrzrz/CLionProjects/Casse-briques-3MOC/method/method.c
+
+C:/Users/zrzrz/CLionProjects/Casse-briques-3MOC/method/method.c
+time.h
+-
+../header/header.h
+C:/Users/zrzrz/CLionProjects/Casse-briques-3MOC/header/header.h
+

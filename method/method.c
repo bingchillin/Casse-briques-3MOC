@@ -1,3 +1,4 @@
+#include <time.h>
 #include "../header/header.h"
 int checkPosChangingConditions(Game *game, int playerChoice){
     int validOrNot = 0;
@@ -566,7 +567,7 @@ void set_players_positions(Game *game) {
     }
 }
 
-Game *init_game(int width, int height, int bomb, int playerCount, int winCount)
+Game *init_game(int width, int height, int bomb, int playerCount, int winCount, int selectedMap)
 {
     Game *game = malloc(sizeof(Game));
 
@@ -591,8 +592,8 @@ Game *init_game(int width, int height, int bomb, int playerCount, int winCount)
     return game;
 }
 
-Game letsPlay(){
-    Game *game = init_game(9,7,1,2,0);
+Game letsPlay(int selectedMap){
+    Game *game = init_game(9,7,1,2,0, selectedMap);
     print_map(game);
     while(1){
         playersTurn(game);
@@ -600,31 +601,85 @@ Game letsPlay(){
 }
 
 void loadMenu() {
-    int menuChoice = 0;
+    char menuChoice;
 
     printf(MAGENTA "########## Casse briques ##########\n\n" RESET);
 
-    printf(GREEN " - 1 : Lancer le jeu\n" RESET);
-    printf(BLUE " - 2 : Paramètres\n" RESET);
+    printf(GREEN " - 1 : Démarrer\n" RESET);
+    printf(BLUE " - 2 : Démarrer en duo\n" RESET);
     printf(RED " - 3 : Quitter\n\n" RESET);
-    while(1) {
-        scanf("%d", &menuChoice);
+
+    do {
+        scanf("%c", &menuChoice);
 
         switch (menuChoice) {
-            case 1:
-                printf("Jeu : OK\n");
-                letsPlay();
+            case '1':
+                mapChoice();
                 printf("\n");
                 break;
-            case 2:
-                printf("Paramètres : OK\n");
+            case '2':
+                printf("Test : OK\n");
                 break;
-            case 3:
+            case '3':
                 printf("Merci d'avoir joué !\n");
                 exit(0);
             default:
-                printf("Mauvais choix ! Veuillez réessayer :\n");
+                printf("Mauvais choix ! Veuillez réessayer : \n");
                 break;
         }
+
+        getchar();
+
+    } while (menuChoice != '3');
+}
+
+Game mapChoice() {
+    int i, selectedMap, test, randSelect = 0;
+    char choice;
+
+    srand(time(NULL));
+
+    for(i = 1; i <= 3; i++) {
+        printf("Voulez-vous sélectionner la carte %d ?\n", i);
+        scanf("%c", &choice);
+
+        if(choice == 'y') {
+            randSelect += i;
+        }
+
+        getchar();
     }
+
+    switch (randSelect) {
+        case 1 :
+            selectedMap = 1;
+            break;
+        case 2 :
+            selectedMap = 2;
+            break;
+        case 3 :
+            selectedMap = 3;
+            break;
+        case 4 :
+            randSelect = rand() % 2 + 1;
+            if(randSelect == 1) {
+                selectedMap = 1;
+            } else {
+                selectedMap = 3;
+            }
+            break;
+        case 5 :
+            randSelect = rand() % 2 + 1;
+            if(randSelect == 1) {
+                selectedMap = 2;
+            } else {
+                selectedMap = 3;
+            }
+            break;
+        default :
+            selectedMap = rand() % 3 + 1;
+            break;
+    }
+
+    return letsPlay(selectedMap);
 }
