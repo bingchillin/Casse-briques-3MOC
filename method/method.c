@@ -5,7 +5,7 @@ int checkPosChangingConditions(Game *game, int playerChoice){
         if (game->players[i]->turn==1){
             if (playerChoice==1){
                 printf("passe par ici");
-                if (game->players[i]->position->y <= 0){
+                if (game->players[i]->position->y <= 1){
                     printf("ici");
                     validOrNot = 0;
                     return validOrNot;
@@ -17,7 +17,7 @@ int checkPosChangingConditions(Game *game, int playerChoice){
                 }
             }
             if (playerChoice == 2){
-                if (game->players[i]->position->x <= 0){
+                if (game->players[i]->position->x <= 1){
                     validOrNot = 0;
                     return validOrNot;
                 }
@@ -27,7 +27,7 @@ int checkPosChangingConditions(Game *game, int playerChoice){
                 }
             }
             if(playerChoice == 3){
-                if (game->players[i]->position->x >= game->map->width){
+                if (game->players[i]->position->x >= game->map->width-1){
                     validOrNot = 0;
                     return validOrNot;
                 }
@@ -37,7 +37,7 @@ int checkPosChangingConditions(Game *game, int playerChoice){
                 }
             }
             if(playerChoice == 4){
-                if (game->players[i]->position->y >= game->map->height){
+                if (game->players[i]->position->y >= game->map->height-1){
                     validOrNot = 0;
                     return validOrNot;
                 }
@@ -213,7 +213,7 @@ Game *movePlayer(Game *game){
             case 4:
                 for (int i = 0; i < game->playerCount; ++i) {
                     if(game->players[i]->turn==1){
-                        game->players[i]->position->x = game->players[i]->position->y+1;
+                        game->players[i]->position->y = game->players[i]->position->y+1;
                         setChangedPosOnMap(game);
                         print_map(game);
                         return 0;
